@@ -8,11 +8,7 @@ import java.awt.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-
-/**
- * @author Fatih Keles
- */
+import java.util.List;
 
 @SuppressWarnings("serial")
 public class SoruPanel extends JPanel {
@@ -88,7 +84,7 @@ public class SoruPanel extends JPanel {
                 g.drawRect(right_board - 1, up_space - 1, board_length + 2, board_length + 2);
                 int thing = -1;
                 String[] lts = { "A", "B", "C" };
-                ArrayList<ArrayList<Integer>> b = this.soru.getGameBoard();
+                List<List<Integer>> b = this.soru.getGameBoard();
                 for (int r = 0; r < soru.size; r++) {
                     for (int c = 0; c < soru.size; c++) {
                         g.setColor(icipucu);
@@ -167,8 +163,6 @@ public class SoruPanel extends JPanel {
                     Integer.parseInt(br.readLine()),
                     Integer.parseInt(br.readLine()),
                     Integer.parseInt(br.readLine()));
-            int tsize = Integer.parseInt(br.readLine());
-            int tlights = Integer.parseInt(br.readLine());
             br.close();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(cicekler, "Renk d\u00fczeni al\u0131namad\u0131", "Hata",
