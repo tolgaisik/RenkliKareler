@@ -1,7 +1,7 @@
+
 /*
  * Created on 07.May.2007
  */
-
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 import java.awt.BorderLayout;
@@ -9,7 +9,6 @@ import java.awt.Dimension;
 /**
  * @author Fatih Keles
  */
-
 @SuppressWarnings("serial")
 public class Cicekler extends JFrame
 {
@@ -21,13 +20,11 @@ public class Cicekler extends JFrame
         setBounds(100,100,600,600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setLayout(new BorderLayout());
-        setMinimumSize(new Dimension(900,600));
         controlPanel = new ControlPanel(this);
         soruPanel = new SoruPanel(this);
-
+        createRootPane();
         getContentPane().add(soruPanel,BorderLayout.CENTER);
         getContentPane().add(controlPanel,BorderLayout.SOUTH);
-
         setVisible(true);
     }
     

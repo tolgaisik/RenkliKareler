@@ -43,7 +43,7 @@ public class Ayarlar extends JDialog implements ActionListener {
 		cz = new JButton("\u00c7i\u00e7ek Rengi");
 		kd = new JButton("Kaydet");
 		al = new JButton("Al");
-		hints = new JButton("Aritmetik Sonuç Rengi");
+		hints = new JButton("Aritmetik Sonu\u00e7 Rengi");
 		sorubaslik = new JButton("Soru Ba\u015fl\u0131\u011f\u0131");
 		cevapbaslik = new JButton("Cevap Ba\u015fl\u0131\u011f\u0131");
 		td.addActionListener(this);

@@ -8,6 +8,8 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
+import javax.swing.JColorChooser;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -27,16 +29,17 @@ import java.awt.image.BufferedImage;
 @SuppressWarnings("serial")
 public class ControlPanel extends JPanel implements ActionListener
 {
-	JButton yenile, yazdir, kopyala, cik, ayarlar;
+	JButton yenile, yazdir, kopyala, cik, ayarlar,renk1,renk2,renk3,info;
 	JTextArea aciklamalar;
 	JCheckBox _sum,_mult,_sub;
 	JComboBox boyut, copylist,type,letcolnum;
-	private String[] boyutlar = {"6", "8", "10", "12","6","9","12"};
+	private String[] boyutlar = {"6", "8", "10", "12"};
+	private String[] boy = {"6","9","12"};
 	private String[] types = {"2","3"};
-	private String[] colors = {"Renk", "Harf", "Rakam"};
+	private String[] colors = {"Harf","Renk","Rakam"};
 	Cicekler cicekler;
 	JPanel buttonPanel;
-	private int n, f,typ,tur;
+	public int n, f,typ,tur;
 	boolean busy = false;
 	private Thread thread = null;
 	private String[] kopyalamaSecenekleri = {"Yan Yana", "Alt Alta", "Soru", "Cevap"};
@@ -59,6 +62,15 @@ public class ControlPanel extends JPanel implements ActionListener
 		cik = new JButton("\u00c7\u0131k");
 		cik.addActionListener(this);
 
+		renk1 = new JButton("Renk 1");
+		renk1.addActionListener(this);
+
+		renk2 = new JButton("Renk 2");
+		renk2.addActionListener(this);
+
+		renk3 = new JButton("Renk 3");
+		renk3.addActionListener(this);
+		
 		type = new JComboBox<String>(types);
 		type.addActionListener(this);
 		type.setSelectedIndex(0);
@@ -67,10 +79,14 @@ public class ControlPanel extends JPanel implements ActionListener
 		boyut.addActionListener(this);
 		boyut.setSelectedIndex(0);
 
+		info = new JButton("?");
+		info.addActionListener(this);
+
+	
 
 		letcolnum = new JComboBox<String>(colors);
 		letcolnum.addActionListener(this);
-		
+		letcolnum.setSelectedIndex(1);
 
 		copylist = new JComboBox(kopyalamaSecenekleri);
 		
@@ -83,22 +99,29 @@ public class ControlPanel extends JPanel implements ActionListener
 		aciklamalar.setWrapStyleWord(true);
 		aciklamalar.setFont(new Font("Verdana",Font.PLAIN,12));
 		aciklamalar.setPreferredSize(new java.awt.Dimension(200,60));
-		aciklamalar.setText("Boş karelerin tümünü kırmızı ve mavi renklerle öyle boyayınız ki: Her sırada ve kolonda eşit sayıda kırmızı ve mavi kare bulunsun. Hiçbir sırada ve kolonda aynı renkli 3 kare yan yana bulunmasın.");
+		aciklamalar.setText("Bo\u015f karelerin t\u00fcm\u00fcn\u00fc k\u0131rm\u0131z\u0131 ve mavi renklerle \u00f6yle boyay\u0131n\u0131z ki: Her s\u0131rada ve kolonda e\u015fit say\u0131da k\u0131rm\u0131z\u0131 ve mavi kare bulunsun. Hi\u00e7bir s\u0131rada ve kolonda ayn\u0131 renkli 3 kare yan yana bulunmas\u0131n.");
 		add(aciklamalar,BorderLayout.CENTER);
 		buttonPanel = new JPanel();
+		
+		buttonPanel.add(new JLabel("T\u00fcr Adedi:"));
+		buttonPanel.add(type);
 		buttonPanel.add(new JLabel("Boyut:"));
 		buttonPanel.add(boyut);
-		buttonPanel.add(new JLabel("Tür Adedi:"));
-		buttonPanel.add(type);
-		buttonPanel.add(new JLabel("Şekil"));
+
+		buttonPanel.add(new JLabel("Sekil:"));
 		buttonPanel.add(letcolnum);
+		
 		buttonPanel.add(yenile);
 		buttonPanel.add(ayarlar);
 		buttonPanel.add(copylist);
 		buttonPanel.add(kopyala);
+		//buttonPanel.add(kopyala);
 		buttonPanel.add(yazdir);
 		buttonPanel.add(cik);
-
+		buttonPanel.add(renk1);
+		buttonPanel.add(renk2);
+		buttonPanel.add(renk3);
+		buttonPanel.add(info);
 		add(buttonPanel,BorderLayout.SOUTH);
 	}
 	
@@ -109,8 +132,43 @@ public class ControlPanel extends JPanel implements ActionListener
 		{
 			int i = boyut.getSelectedIndex();
 		}
-		else if (source == type) {
+		else if(source == renk1) {
+			Color c = JColorChooser.showDialog(null,"Renk 1",cicekler.soruPanel.c1);
+			if(c != null) {
+				cicekler.soruPanel.c1 = c;
+				cicekler.soruPanel.repaint();
+			}
+		}
+		else if(source == info) {
+			Info inf = new Info();
+		}
+		else if(source == renk2) {
+			Color c4 = JColorChooser.showDialog(null,"Renk 2",cicekler.soruPanel.c2);
+			if(c4 != null) {
+				cicekler.soruPanel.c2 = c4;cicekler.soruPanel.repaint();
+			}
+		}
+		else if(source == renk3) {
+			Color c5 = JColorChooser.showDialog(null,"Renk 3",cicekler.soruPanel.c3);
+			if(c5 != null) {
+				cicekler.soruPanel.c3 = c5;cicekler.soruPanel.repaint();
+			}
+		}
+		else if (source == type && boyut != null) {
+			if(type.getSelectedIndex() == 1) {
+				boyut.removeAllItems();
+				for (int i = 0; i < boy.length; i++) {
+					boyut.addItem(boy[i]);
+				}
 			
+			}
+			else {
+				boyut.removeAllItems();
+				for (int i = 0; i < boyutlar.length; i++) {
+					boyut.addItem(boyutlar[i]);
+				}
+				
+			}
 		}
 		else if(source==yenile)
 		{
@@ -124,8 +182,9 @@ public class ControlPanel extends JPanel implements ActionListener
 			}
 			this.typ = type.getSelectedIndex();
 			cicekler.soruPanel.c = letcolnum.getSelectedIndex();
-			n = (Integer.parseInt(boyutlar[boyut.getSelectedIndex()]));
+			n = typ == 1 ? (Integer.parseInt(boy[boyut.getSelectedIndex()])) : (Integer.parseInt(boyutlar[boyut.getSelectedIndex()]));
 			this.tur = letcolnum.getSelectedIndex();
+			System.out.println(this.tur);
 			thread = new Thread(){
 				public void run()
 				{
@@ -137,10 +196,11 @@ public class ControlPanel extends JPanel implements ActionListener
 					cicekler.soruPanel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 					busy = false;
 					cicekler.soruPanel.repaint();
+					
 				}
 			};
-			
 			thread.start();
+			
 		}
 		else if(source==cik)
 		{
@@ -198,27 +258,62 @@ public class ControlPanel extends JPanel implements ActionListener
 		
 	}
 	
-	public void kopyala()
-	{
-		int copymode = copylist.getSelectedIndex();
-		int w = cicekler.soruPanel.getWidth(), h = cicekler.soruPanel.getHeight();
-		BufferedImage image = new BufferedImage(w,h,BufferedImage.TYPE_INT_RGB);
-		cicekler.soruPanel.paintComponent(image.createGraphics());
-		if (copymode==1) {
-			BufferedImage newimage = new BufferedImage(cicekler.soruPanel.hucreBoyu*(cicekler.soruPanel.soru.size+1)+2,h*2+cicekler.soruPanel.hucreBoyu,
-					BufferedImage.TYPE_INT_RGB);
-			Graphics2D graphics = newimage.createGraphics();
-			graphics.setColor(Color.white);
-			graphics.fillRect(0, 0, newimage.getWidth(), newimage.getHeight());
-			cicekler.soruPanel.paintComponent(graphics);
-			graphics.translate(-image.getWidth()+cicekler.soruPanel.hucreBoyu*(cicekler.soruPanel.soru.size+1)+2, h+cicekler.soruPanel.hucreBoyu);
-			cicekler.soruPanel.paintComponent(graphics);
-			image = newimage;
+	public void kopyala() {
+		int copy_mode = copylist.getSelectedIndex();
+			BufferedImage image =
+				new BufferedImage(cicekler.soruPanel.getWidth(),
+						cicekler.soruPanel.getHeight(),
+						BufferedImage.TYPE_INT_RGB);
+			
+			cicekler.soruPanel.paintComponent(image.createGraphics());
+			BufferedImage question = image.getSubimage(cicekler.soruPanel.left_space-1, cicekler.soruPanel.up_space-1, cicekler.soruPanel.board_length+3, cicekler.soruPanel.board_length+3);
+			BufferedImage answer = image.getSubimage(cicekler.soruPanel.right_board-1, cicekler.soruPanel.up_space-1, cicekler.soruPanel.board_length+3, cicekler.soruPanel.board_length+3);
+			if(copy_mode == 0)
+			{
+				image = new BufferedImage(question.getWidth()+answer.getWidth()+cicekler.soruPanel.middle_space,
+						question.getHeight(),
+						BufferedImage.TYPE_INT_RGB);
+				Graphics g = image.getGraphics();
+				g.setColor(Color.white);
+				g.fillRect(0, 0, image.getWidth(), image.getHeight());
+				g.drawImage(question, 0, 0, this);
+				g.drawImage(answer, question.getWidth()+cicekler.soruPanel.middle_space,0, this);
+			}
+			else if(copy_mode == 1)
+			{
+				image = new BufferedImage(question.getWidth(),
+						question.getHeight()+answer.getHeight()+cicekler.soruPanel.middle_space,
+						BufferedImage.TYPE_INT_RGB);
+				Graphics g = image.getGraphics();
+				g.setColor(Color.white);
+				g.fillRect(0, 0, image.getWidth(), image.getHeight());
+				g.drawImage(question, 0, 0, this);
+				g.drawImage(answer, 0, question.getHeight()+cicekler.soruPanel.middle_space, this);
+			}
+			if(copy_mode == 2)
+			{
+				image = question;
+			}
+			else if(copy_mode == 3)
+			{
+				image = answer;
+			}
+			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(
+					new ImageSelection(image), null);
+	}
+	public class T extends Thread{
+		public boolean exit = false;
+		public void run() {
+			exit = true;
+			busy = true;
+			yenile.setText("\u0130ptal");
+			cicekler.soruPanel.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+			cicekler.soruPanel.soru = new Kareler(n,typ+2);
+			yenile.setText("Yeni Soru");
+			cicekler.soruPanel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			busy = false;
+			cicekler.soruPanel.repaint();
 		}
-		else if(copymode==2) image = image.getSubimage(0, 0, cicekler.soruPanel.hucreBoyu*(cicekler.soruPanel.soru.size+1)+2, h);
-		else if(copymode==3) image = image.getSubimage(w-cicekler.soruPanel.hucreBoyu*(cicekler.soruPanel.soru.size+1)-2, 0, cicekler.soruPanel.hucreBoyu*(cicekler.soruPanel.soru.size+1)+2, h);
-		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(
-				new ImageSelection(image), null);
 	}
 
 }
