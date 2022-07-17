@@ -2,11 +2,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 import java.util.List;
+
 public class Kareler {
     public int size, typeCount;
     public boolean stop;
     List<List<Integer>> board;
     List<List<Integer>> possible, result, question;
+    String gameStr = "";
 
     public static class SolutionDoesNotExistException extends Exception {
         public SolutionDoesNotExistException(String msg) {
@@ -28,13 +30,22 @@ public class Kareler {
         this.possible = new ArrayList<List<Integer>>(this.size);
         this.result = new ArrayList<List<Integer>>(this.size);
         this.question = new ArrayList<List<Integer>>(this.size);
-        this.initialize();
-        this.getQ3();
-        System.out.println();
+        initialize();
+        getQ3();
+        this.gameStr = generateGameString(this.question);
     }
 
-    String generateGameString() {
-        return null;
+    String generateGameString(List<List<Integer>> game) {
+        return game.stream()
+                .map(r -> {
+                    String s = r.stream()
+                            .map(i -> i == -1 ? "?" : Integer.toString(i))
+                            .map(j -> j + "/")
+                            .reduce("", (a, b) -> a + b);
+                    return s.substring(0, s.length() - 1);
+                })
+                .map(text -> "[" + text + "]")
+                .reduce("", (el, total) -> el + total);
     }
 
     Kareler(String input) throws InvalidSolutionException, SolutionDoesNotExistException {
@@ -87,7 +98,7 @@ public class Kareler {
                 lst = lst23;
             }
         }
-        this.findPermutations(lst, 0, lst.length);
+        findPermutations(lst, 0, lst.length);
         Collections.shuffle(this.board);
         findPossible();
 
@@ -116,7 +127,7 @@ public class Kareler {
         if (keepGoing == false) {
             this.possible.clear();
             Collections.shuffle(this.board);
-            this.findPossible();
+            findPossible();
         }
     }
 
@@ -176,7 +187,7 @@ public class Kareler {
 
     private void findPermutations(int str[], int index, int n) {
         if (index >= n) {
-            if (this.singleRowCheck(str)) {
+            if (singleRowCheck(str)) {
                 ArrayList<Integer> ls = new ArrayList<Integer>(str.length);
                 for (Integer integer : str) {
                     ls.add(integer);
@@ -245,7 +256,7 @@ public class Kareler {
     public boolean isSolvable2() {
         int resultCounter = 0, prev;
         while (true) {
-            prev = this.count(this.result);
+            prev = count(this.result);
             // System.out.println("Starts before partial");
 
             /*
@@ -254,22 +265,22 @@ public class Kareler {
              * System.out.println(arrayList);
              * }
              */
-            this.solveRows2();
+            solveRows2();
             /*
              * System.out.println("After cols before rows");
-             * for (ArrayList<Integer> arrayList : this.result) {
+             * for (ArrayList<Integer> arrayList : result) {
              * System.out.println(arrayList);
              * }
              */
-            this.solveCols2();
+            solveCols2();
             /*
              * System.out.println("Ended after rows");
-             * for (ArrayList<Integer> arrayList : this.result) {
+             * for (ArrayList<Integer> arrayList : result) {
              * System.out.println(arrayList);
              * }
              */
-            this.solvePartial(this.result);
-            resultCounter = this.count(this.result);
+            solvePartial(this.result);
+            resultCounter = count(this.result);
             if (prev == resultCounter) {
                 // System.out.println("Returnin False");
                 return false;
@@ -417,15 +428,15 @@ public class Kareler {
                 continue;
             }
             trys++;
-            solved = this.typeCount == 2 ? this.isSolvable2() : this.solveResult();
+            solved = this.typeCount == 2 ? isSolvable2() : solveResult();
             if (solved) {
                 trys = 0;
-                if (this.count(this.question) <= total) {
+                if (count(this.question) <= total) {
                     break;
                 }
             } else {
                 this.question.get(rand1).set(rand2, keeper);
-                if (trys >= this.count(question)) {
+                if (trys >= count(question)) {
                     trys = 0;
                     this.question.clear();
                     for (List<Integer> arrayList : this.possible) {
@@ -451,7 +462,7 @@ public class Kareler {
                 break;
             }
             if (counter == prevcount) {
-                System.out.println("Returning False and " + this.count(this.question));
+                System.out.println("Returning False and " + count(this.question));
                 return false;
             }
         }

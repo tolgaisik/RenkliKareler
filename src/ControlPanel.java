@@ -36,20 +36,20 @@ public class ControlPanel extends JPanel implements ActionListener {
     private String[] boy = { "6", "9", "12" };
     private String[] types = { "2", "3" };
     private String[] colors = { "Harf", "Renk", "Rakam" };
-    App cicekler;
+    App application;
     JPanel buttonPanel;
     public int n, f, typ, tur;
     boolean busy = false;
     private Thread thread = null;
     private String[] kopyalamaSecenekleri = { "Yan Yana", "Alt Alta", "Soru", "Cevap" };
 
-    public ControlPanel(App cicekler) {
-        this.cicekler = cicekler;
+    public ControlPanel(App _app) {
+        this.application = _app;
 
         yenile = new JButton("Yeni Soru");
         yenile.addActionListener(this);
 
-        yazdir = new JButton("Yazd\u0131r");
+        yazdir = new JButton("Yazdır");
         yazdir.addActionListener(this);
 
         kopyala = new JButton("Kopyala");
@@ -58,7 +58,7 @@ public class ControlPanel extends JPanel implements ActionListener {
         ayarlar = new JButton("Ayarlar");
         ayarlar.addActionListener(this);
 
-        cik = new JButton("\u00c7\u0131k");
+        cik = new JButton("\u00c7ık");
         cik.addActionListener(this);
 
         renk1 = new JButton("Renk 1");
@@ -97,11 +97,11 @@ public class ControlPanel extends JPanel implements ActionListener {
         aciklamalar.setFont(new Font("Verdana", Font.PLAIN, 12));
         aciklamalar.setPreferredSize(new java.awt.Dimension(200, 60));
         aciklamalar.setText(
-                "Bo\u015f karelerin t\u00fcm\u00fcn\u00fc k\u0131rm\u0131z\u0131 ve mavi renklerle \u00f6yle boyay\u0131n\u0131z ki: Her s\u0131rada ve kolonda e\u015fit say\u0131da k\u0131rm\u0131z\u0131 ve mavi kare bulunsun. Hi\u00e7bir s\u0131rada ve kolonda ayn\u0131 renkli 3 kare yan yana bulunmas\u0131n.");
+                "Boş karelerin tümünü kırmızı ve mavi renklerle öyle boyayınız ki: Her sırada ve kolonda eşit sayıda kırmızı ve mavi kare bulunsun. Hi\u00e7bir sırada ve kolonda aynı renkli 3 kare yan yana bulunmasın.");
         add(aciklamalar, BorderLayout.CENTER);
         buttonPanel = new JPanel();
 
-        buttonPanel.add(new JLabel("T\u00fcr Adedi:"));
+        buttonPanel.add(new JLabel("Tür Adedi:"));
         buttonPanel.add(type);
         buttonPanel.add(new JLabel("Boyut:"));
         buttonPanel.add(boyut);
@@ -122,29 +122,32 @@ public class ControlPanel extends JPanel implements ActionListener {
         buttonPanel.add(info);
         add(buttonPanel, BorderLayout.SOUTH);
     }
-
+    String updateText(String text) {
+        String temp = "Boş karelerin tümünü kırmızı ve mavi renklerle öyle boyayınız ki: Her sırada ve kolonda eşit sayıda kırmızı ve mavi kare bulunsun. Hi\u00e7bir sırada ve kolonda aynı renkli 3 kare yan yana bulunmasın.";
+        return "";
+    }
     public void actionPerformed(ActionEvent event) {
         Object source = event.getSource();
         if (source == boyut) {
         } else if (source == renk1) {
-            Color c = JColorChooser.showDialog(null, "Renk 1", cicekler.soruPanel.c1);
+            Color c = JColorChooser.showDialog(null, "Renk 1", application.soruPanel.c1);
             if (c != null) {
-                cicekler.soruPanel.c1 = c;
-                cicekler.soruPanel.repaint();
+                application.soruPanel.c1 = c;
+                application.soruPanel.repaint();
             }
         } else if (source == info) {
             new Info();
         } else if (source == renk2) {
-            Color c4 = JColorChooser.showDialog(null, "Renk 2", cicekler.soruPanel.c2);
+            Color c4 = JColorChooser.showDialog(null, "Renk 2", application.soruPanel.c2);
             if (c4 != null) {
-                cicekler.soruPanel.c2 = c4;
-                cicekler.soruPanel.repaint();
+                application.soruPanel.c2 = c4;
+                application.soruPanel.repaint();
             }
         } else if (source == renk3) {
-            Color c5 = JColorChooser.showDialog(null, "Renk 3", cicekler.soruPanel.c3);
+            Color c5 = JColorChooser.showDialog(null, "Renk 3", application.soruPanel.c3);
             if (c5 != null) {
-                cicekler.soruPanel.c3 = c5;
-                cicekler.soruPanel.repaint();
+                application.soruPanel.c3 = c5;
+                application.soruPanel.repaint();
             }
         } else if (source == type && boyut != null) {
             if (type.getSelectedIndex() == 1) {
@@ -164,11 +167,11 @@ public class ControlPanel extends JPanel implements ActionListener {
             if (busy) {
                 busy = false;
                 yenile.setText("Yeni Soru");
-                cicekler.soruPanel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                application.soruPanel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                 return;
             }
             this.typ = type.getSelectedIndex();
-            cicekler.soruPanel.c = letcolnum.getSelectedIndex();
+            application.soruPanel.c = letcolnum.getSelectedIndex();
             n = typ == 1 ? (Integer.parseInt(boy[boyut.getSelectedIndex()]))
                     : (Integer.parseInt(boyutlar[boyut.getSelectedIndex()]));
             this.tur = letcolnum.getSelectedIndex();
@@ -176,12 +179,12 @@ public class ControlPanel extends JPanel implements ActionListener {
                 public void run() {
                     busy = true;
                     yenile.setText("\u0130ptal");
-                    cicekler.soruPanel.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-                    cicekler.soruPanel.soru = new Kareler(n, typ + 2);
+                    application.soruPanel.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+                    application.soruPanel.soru = new Kareler(n, typ + 2);
                     yenile.setText("Yeni Soru");
-                    cicekler.soruPanel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                    application.soruPanel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                     busy = false;
-                    cicekler.soruPanel.repaint();
+                    application.soruPanel.repaint();
 
                 }
             };
@@ -190,9 +193,9 @@ public class ControlPanel extends JPanel implements ActionListener {
         } else if (source == cik) {
             System.exit(0);
         } else if (source == ayarlar) {
-            new Ayarlar(cicekler);
+            new Ayarlar(application);
         } else if (source == yazdir) {
-            PrintJob pj = Toolkit.getDefaultToolkit().getPrintJob(cicekler, "", new java.util.Properties());
+            PrintJob pj = Toolkit.getDefaultToolkit().getPrintJob(application, "", new java.util.Properties());
             if (pj == null)
                 return;
             Graphics g = pj.getGraphics();
@@ -216,17 +219,17 @@ public class ControlPanel extends JPanel implements ActionListener {
                 x += (fm.stringWidth(temp + " "));
             }
 
-            cicekler.soruPanel.printWidth = pj.getPageDimension().width - 50;
-            cicekler.soruPanel.printHeight = pj.getPageDimension().height - 50;
-            cicekler.soruPanel.printX = 25;
-            cicekler.soruPanel.printY = y + 30;
-            cicekler.soruPanel.print = true;
-            cicekler.soruPanel.paintComponent(g);
-            cicekler.soruPanel.print = false;
-            cicekler.soruPanel.printX = 0;
-            cicekler.soruPanel.printY = 0;
-            cicekler.soruPanel.printWidth = 0;
-            cicekler.soruPanel.printHeight = 0;
+            application.soruPanel.printWidth = pj.getPageDimension().width - 50;
+            application.soruPanel.printHeight = pj.getPageDimension().height - 50;
+            application.soruPanel.printX = 25;
+            application.soruPanel.printY = y + 30;
+            application.soruPanel.print = true;
+            application.soruPanel.paintComponent(g);
+            application.soruPanel.print = false;
+            application.soruPanel.printX = 0;
+            application.soruPanel.printY = 0;
+            application.soruPanel.printWidth = 0;
+            application.soruPanel.printHeight = 0;
 
             pj.end();
         } else if (source == kopyala) {
@@ -237,33 +240,33 @@ public class ControlPanel extends JPanel implements ActionListener {
 
     public void kopyala() {
         int copy_mode = copylist.getSelectedIndex();
-        BufferedImage image = new BufferedImage(cicekler.soruPanel.getWidth(),
-                cicekler.soruPanel.getHeight(),
+        BufferedImage image = new BufferedImage(application.soruPanel.getWidth(),
+                application.soruPanel.getHeight(),
                 BufferedImage.TYPE_INT_RGB);
 
-        cicekler.soruPanel.paintComponent(image.createGraphics());
-        BufferedImage question = image.getSubimage(cicekler.soruPanel.left_space - 1, cicekler.soruPanel.up_space - 1,
-                cicekler.soruPanel.board_length + 3, cicekler.soruPanel.board_length + 3);
-        BufferedImage answer = image.getSubimage(cicekler.soruPanel.right_board - 1, cicekler.soruPanel.up_space - 1,
-                cicekler.soruPanel.board_length + 3, cicekler.soruPanel.board_length + 3);
+        application.soruPanel.paintComponent(image.createGraphics());
+        BufferedImage question = image.getSubimage(application.soruPanel.left_space - 1, application.soruPanel.up_space - 1,
+                application.soruPanel.board_length + 3, application.soruPanel.board_length + 3);
+        BufferedImage answer = image.getSubimage(application.soruPanel.right_board - 1, application.soruPanel.up_space - 1,
+                application.soruPanel.board_length + 3, application.soruPanel.board_length + 3);
         if (copy_mode == 0) {
-            image = new BufferedImage(question.getWidth() + answer.getWidth() + cicekler.soruPanel.middle_space,
+            image = new BufferedImage(question.getWidth() + answer.getWidth() + application.soruPanel.middle_space,
                     question.getHeight(),
                     BufferedImage.TYPE_INT_RGB);
             Graphics g = image.getGraphics();
             g.setColor(Color.white);
             g.fillRect(0, 0, image.getWidth(), image.getHeight());
             g.drawImage(question, 0, 0, this);
-            g.drawImage(answer, question.getWidth() + cicekler.soruPanel.middle_space, 0, this);
+            g.drawImage(answer, question.getWidth() + application.soruPanel.middle_space, 0, this);
         } else if (copy_mode == 1) {
             image = new BufferedImage(question.getWidth(),
-                    question.getHeight() + answer.getHeight() + cicekler.soruPanel.middle_space,
+                    question.getHeight() + answer.getHeight() + application.soruPanel.middle_space,
                     BufferedImage.TYPE_INT_RGB);
             Graphics g = image.getGraphics();
             g.setColor(Color.white);
             g.fillRect(0, 0, image.getWidth(), image.getHeight());
             g.drawImage(question, 0, 0, this);
-            g.drawImage(answer, 0, question.getHeight() + cicekler.soruPanel.middle_space, this);
+            g.drawImage(answer, 0, question.getHeight() + application.soruPanel.middle_space, this);
         }
         if (copy_mode == 2) {
             image = question;
@@ -281,12 +284,12 @@ public class ControlPanel extends JPanel implements ActionListener {
             exit = true;
             busy = true;
             yenile.setText("\u0130ptal");
-            cicekler.soruPanel.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-            cicekler.soruPanel.soru = new Kareler(n, typ + 2);
+            application.soruPanel.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+            application.soruPanel.soru = new Kareler(n, typ + 2);
             yenile.setText("Yeni Soru");
-            cicekler.soruPanel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            application.soruPanel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             busy = false;
-            cicekler.soruPanel.repaint();
+            application.soruPanel.repaint();
         }
     }
 

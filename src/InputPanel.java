@@ -47,7 +47,7 @@ public class InputPanel extends JPanel {
                 } catch (Kareler.SolutionDoesNotExistException e) {
 
                 } catch (Exception e) {
-                    
+
                 } finally {
                     application.soruPanel.repaint();
                 }
