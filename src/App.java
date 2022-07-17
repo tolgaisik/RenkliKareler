@@ -5,16 +5,15 @@
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 /**
  * @author Fatih Keles
  */
 @SuppressWarnings("serial")
-public class Cicekler extends JFrame
+public class App extends JFrame
 {
 	public SoruPanel soruPanel;
 	ControlPanel controlPanel;
-    public Cicekler()
+    public App()
     {   
     	setTitle("Renkli Kareler");
         setBounds(100,100,600,600);
@@ -34,7 +33,7 @@ public class Cicekler extends JFrame
 	        UIManager.setLookAndFeel(
 	        		"com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 	    } catch (Exception e) {}
-        new Cicekler();
+        new App();
     }
     public void setTitle(int i)
     {

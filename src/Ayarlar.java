@@ -20,11 +20,11 @@ import javax.swing.JOptionPane;
 
 @SuppressWarnings("serial")
 public class Ayarlar extends JDialog implements ActionListener {
-	Cicekler soru;
+	App soru;
 	JButton td,tc,tb,ap,di,cz,yt,ii,kd,al,da,sorubaslik,cevapbaslik,hints;
 	JFontChooser fontChooser;
 	final Ayarlar ayarlar = this;
-	public Ayarlar(Cicekler soru)
+	public Ayarlar(App soru)
 	{
 		super(soru,"Ayarlar",false);
 		fontChooser = new JFontChooser(soru);

@@ -37,13 +37,13 @@ public class ControlPanel extends JPanel implements ActionListener
 	private String[] boy = {"6","9","12"};
 	private String[] types = {"2","3"};
 	private String[] colors = {"Harf","Renk","Rakam"};
-	Cicekler cicekler;
+	App cicekler;
 	JPanel buttonPanel;
 	public int n, f,typ,tur;
 	boolean busy = false;
 	private Thread thread = null;
 	private String[] kopyalamaSecenekleri = {"Yan Yana", "Alt Alta", "Soru", "Cevap"};
-	public ControlPanel(Cicekler cicekler)
+	public ControlPanel(App cicekler)
 	{
 		this.cicekler = cicekler;
 

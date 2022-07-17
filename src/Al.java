@@ -24,7 +24,7 @@ public class Al extends JDialog {
 	final JList list = new JList();
 	SoruPanel panel;
 	final Al al = this;
-	Al(Cicekler cicekler) {
+	Al(App cicekler) {
 		super(cicekler,"Renk Düzeni Seciniz",true);
 		panel = cicekler.soruPanel;
 		int w = 380, h = 240;
