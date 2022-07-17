@@ -1,6 +1,9 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.List;
 
 public class Kareler {
@@ -9,6 +12,7 @@ public class Kareler {
     List<List<Integer>> board;
     List<List<Integer>> possible, result, question;
     String gameStr = "";
+    private static final String inpRegex = "\\[.*?\\]";
 
     public static class SolutionDoesNotExistException extends Exception {
         public SolutionDoesNotExistException(String msg) {
@@ -32,7 +36,7 @@ public class Kareler {
         this.question = new ArrayList<List<Integer>>(this.size);
         initialize();
         getQ3();
-        this.gameStr = generateGameString(this.question);
+        this.gameStr = generateGameString(roll(this.question));
     }
 
     String generateGameString(List<List<Integer>> game) {
@@ -48,20 +52,69 @@ public class Kareler {
                 .reduce("", (el, total) -> el + total);
     }
 
-    Kareler(String input) throws InvalidSolutionException, SolutionDoesNotExistException {
-        parseInput(input);
-        /*
-         * if (false) {
-         * throw new InvalidSolutionException("");
-         * }
-         * if (false) {
-         * throw new SolutionDoesNotExistException("");
-         * }
-         */
+    static class Solution {
+        Integer numSolutions;
+        List<String> solutions;
+
+        Solution(Integer numSolutions$, List<String> solutions$) {
+            this.numSolutions = numSolutions$;
+            this.solutions = solutions$;
+        }
     }
 
-    void parseInput(String input) {
+    enum Type {
+        TUPLE,
+        TRIPLE,
+    }
 
+    Kareler(String input) throws InvalidSolutionException, SolutionDoesNotExistException {
+        List<List<Integer>> questionGrid = parseInput(input);
+        Type type = getType(questionGrid);
+        Solution s = solve(questionGrid, type);
+        if (s.numSolutions == 0) {
+            throw new SolutionDoesNotExistException("Solution does not exist.");
+        } else if (s.numSolutions > 1) {
+            throw new InvalidSolutionException("");
+        }
+    }
+
+    Type getType(List<List<Integer>> q) {
+        for (List<Integer> answer : q) {
+            if (answer.contains(2)) {
+                return Type.TRIPLE;
+            }
+        }
+        return Type.TUPLE;
+    }
+
+    Kareler.Solution solve(List<List<Integer>> qB, Type t) {
+        /* TODO: next we need to solve the game */
+        return null;
+    }
+
+    List<List<Integer>> parseInput(String input) {
+        List<String[]> matches = getMatches(input);
+        List<List<Integer>> retval = new ArrayList<List<Integer>>();
+        matches.stream().forEach(m -> {
+            List<Integer> row = new ArrayList<>();
+            for (String str : m) {
+                row.add((str.equals("?") ? -1 : Integer.parseInt(str)));
+            }
+            retval.add(row);
+        });
+        return retval;
+    }
+
+    private List<String[]> getMatches(String input) {
+        Pattern ptr = Pattern.compile(inpRegex);
+        Matcher matcher = ptr.matcher(input);
+        List<String[]> matches = matcher.results()
+                .map((m) -> m.group())
+                .map(s -> s.trim()
+                        .replaceAll("\\[", "").replaceAll("\\]", ""))
+                .map(s -> s.split("/"))
+                .collect(Collectors.toList());
+        return matches;
     }
 
     public List<List<Integer>> getGameBoard() {
@@ -602,5 +655,17 @@ public class Kareler {
             }
         }
         return true;
+    }
+
+    <T> List<List<T>> roll(List<List<T>> list) {
+        List<List<T>> result = new ArrayList<List<T>>();
+        for (int i = 0; i < list.size(); i++) {
+            List<T> row = new ArrayList<T>();
+            for (int j = 0; j < list.get(i).size(); j++) {
+                row.add(list.get(j).get(i));
+            }
+            result.add(row);
+        }
+        return result;
     }
 }

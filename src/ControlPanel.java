@@ -122,9 +122,12 @@ public class ControlPanel extends JPanel implements ActionListener {
         buttonPanel.add(info);
         add(buttonPanel, BorderLayout.SOUTH);
     }
-    String updateText(String text) {
+    String updateText() {
         String temp = "Boş karelerin tümünü kırmızı ve mavi renklerle öyle boyayınız ki: Her sırada ve kolonda eşit sayıda kırmızı ve mavi kare bulunsun. Hi\u00e7bir sırada ve kolonda aynı renkli 3 kare yan yana bulunmasın.";
-        return "";
+        if (application.soruPanel.soru.gameStr != null) {
+            temp += "\n" + application.soruPanel.soru.gameStr;
+        }
+        return temp;
     }
     public void actionPerformed(ActionEvent event) {
         Object source = event.getSource();
@@ -184,6 +187,7 @@ public class ControlPanel extends JPanel implements ActionListener {
                     yenile.setText("Yeni Soru");
                     application.soruPanel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                     busy = false;
+                    aciklamalar.setText(updateText());
                     application.soruPanel.repaint();
 
                 }

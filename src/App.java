@@ -13,6 +13,7 @@ public class App extends JFrame
 {
 	public SoruPanel soruPanel;
 	ControlPanel controlPanel;
+    InputPanel inputPanel;
     public App()
     {   
     	setTitle("Renkli Kareler");
@@ -21,9 +22,11 @@ public class App extends JFrame
         getContentPane().setLayout(new BorderLayout());
         controlPanel = new ControlPanel(this);
         soruPanel = new SoruPanel(this);
+        inputPanel = new InputPanel(this);
         createRootPane();
         getContentPane().add(soruPanel,BorderLayout.CENTER);
         getContentPane().add(controlPanel,BorderLayout.SOUTH);
+        getContentPane().add(inputPanel, BorderLayout.NORTH);
         setVisible(true);
     }
     

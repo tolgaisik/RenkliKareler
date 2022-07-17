@@ -41,7 +41,7 @@ public class InputPanel extends JPanel {
             public void run() {
                 application.soruPanel.soru = null;
                 try {
-                    application.soruPanel.soru = new Kareler("input");
+                    application.soruPanel.soru = new Kareler(questionInput.getText());
                 } catch (Kareler.InvalidSolutionException e) {
 
                 } catch (Kareler.SolutionDoesNotExistException e) {
