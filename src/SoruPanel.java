@@ -25,11 +25,11 @@ public class SoruPanel extends JPanel {
             hints = Color.BLACK,
             c1 = Color.BLUE, c2 = Color.RED, c3 = Color.YELLOW;
     int cicekYuzde = 80;
-    int hucreBoyu = 0; // rakamlarin geldigi hucrelerin en ve boyu
+    int hucreBoyu = 0;
     Font font = null;
-    boolean print = false; // yazdiriliyor mu
-    int printWidth = 0, printHeight = 0; // kagit boyutlari
-    int printX = 0, printY = 0; // kagitin sol ve ust bosluklari
+    boolean print = false;
+    int printWidth = 0, printHeight = 0;
+    int printX = 0, printY = 0;
     App cicekler;
     public int c = 0;
     public Kareler soru;
