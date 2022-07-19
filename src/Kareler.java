@@ -69,6 +69,7 @@ public class Kareler {
 
     Kareler(String input) throws InvalidSolutionException, SolutionDoesNotExistException {
         List<List<Integer>> questionGrid = parseInput(input);
+        this.size = questionGrid.size();
         Type type = getType(questionGrid);
         Solution s = solve(questionGrid, type);
         if (s.numSolutions == 0) {
@@ -89,7 +90,105 @@ public class Kareler {
 
     Kareler.Solution solve(List<List<Integer>> qB, Type t) {
         /* TODO: next we need to solve the game */
+        // qB.stream().forEach(q -> q.stream().forEach(s -> System.out.println(s)));
+        System.out.println(t);
+        int numSol = solve(toGrid(qB), t);
+        if (numSol == 0) {
+
+        }
         return null;
+    }
+
+    Integer[][] toGrid(List<List<Integer>> list) {
+        Integer[][] result = new Integer[list.size()][list.get(0).size()];
+        for (int i = 0; i < list.size(); i++) {
+            for (int j = 0; j < list.get(i).size(); j++) {
+                result[i][j] = list.get(i).get(j);
+            }
+        }
+        return result;
+    }
+
+    int solve(Integer[][] q, Type t) {
+        this.numSolutions = 0;
+        solve__(q, t);
+        return numSolutions;
+    }
+    int mapSize(Type t) {
+        int typePerSize = 0;
+        switch (t) {
+            case TUPLE:
+                typePerSize = 2;
+                break;
+            case TRIPLE:
+                typePerSize = 3;
+                break;
+            default:
+                break;
+        }
+        return typePerSize;
+    }
+    Boolean possible(Integer[][] q, Type t) {
+        int typesPerRow = mapSize(t);
+        for (int i = 0; i < q.length; i++) {
+            if (checkRow(q[i], typesPerRow)) {
+                
+            }
+        }
+
+        return false;
+    }
+
+    private boolean checkRow(Integer[] integers, int typesPerRow) {
+        int max = this.size / typesPerRow;
+        int[] typeCounters = new int[typesPerRow];
+        for (int i = 0; i < typesPerRow; i++) {
+            typeCounters[i] = 0;
+        }
+        for (int i = 0; i < integers.length; i++) {
+            if (integers[i] != -1 && ++typeCounters[integers[i]] > max) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    Integer numSolutions = 0;
+    List<Integer[][]> solutions = new ArrayList<Integer[][]>();
+    void solve__(Integer[][] q, Type t) {
+        int[] firstEmpty = getFirstEmptyCells(q);
+        if (firstEmpty[0] == -1) {
+            solutions.add(q.clone());
+            this.numSolutions++;
+        } 
+        if (this.numSolutions < 2 && possible(q, t)) {
+            q[firstEmpty[0]][firstEmpty[1]] = 0;
+            solve__(q, t);
+            q[firstEmpty[0]][firstEmpty[1]] = 1;
+            solve__(q, t);
+            if (t == Type.TRIPLE) {
+                q[firstEmpty[0]][firstEmpty[1]] = 2;
+                solve__(q, t);
+            }
+        }
+    }
+    int[] getFirstEmptyCells(Integer[][] q) {
+        int[] retval = new int[2];
+        for (int i = 0; i < q.length; i++) {
+            for (int j = 0; j < q[i].length; j++) {
+                if (q[i][j] == -1) {
+                    retval[0] = i;
+                    retval[1] = j;
+                    return retval;
+                }
+            }
+        }
+        retval[0] = -1;
+        return retval;
+    }
+    // 0, 1, 2
+    int solveTriple(List<List<Integer>> q) {
+        return -1;
     }
 
     List<List<Integer>> parseInput(String input) {
